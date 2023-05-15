@@ -15,7 +15,7 @@ After making sure you are in the correct directory, run "npm i" to install the n
 
 ## Usage
 
-Use the arrow keys to navigate the menus, and complete prompts as necassary.
+Log into mysql to create the necessary database using "source db/schema.sql;" and "source db/seeds.sql;", then run "node index.js" then use the arrow keys to navigate the menus, and complete prompts as necassary.
 
 ## License
 
