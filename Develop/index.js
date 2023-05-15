@@ -181,7 +181,10 @@ function updateEmpRole() {
           }))
         }
       ]).then(function (answers) {
-        dbConnect.query('UPDATE employee SET ? WHERE ?', [{ role_id: answers.updatedRole }, { id: answers.select }], function (err, res) {
+        dbConnect.query('UPDATE employee SET ? WHERE ?', 
+        [{ role_id: answers.updatedRole }, 
+        { id: answers.select }],
+        function (err, res) {
           if (err) throw err
           console.log('Employee role updated.')
           dbSearch()
