@@ -55,15 +55,24 @@ function addDepartment() {
       department_name: answer.addDepartment
     }, function (err, res) {
       if (err) throw err;
-      console.table(res)
-      dbSearch()
-    })
-  }
-  )
+      console.table(res);
+      dbSearch();
+    });
+  });
 }
-const addRole = () => {
+
+function addRole() {
   dbConnect.query('SELECT * FROM department', (err, department) => {
-    if (err) { console.log(err) }
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    const departmentChoices = department.map(dep => ({
+      name: dep.department_name,
+      value: dep.id
+    }));
+
     inquirer.prompt([
       {
         type: 'input',
@@ -79,10 +88,7 @@ const addRole = () => {
         type: 'list',
         name: 'department_id',
         message: 'Department ID:',
-        choices: department.map(department => ({
-          name: `${department.department_name}`,
-          value: department.id
-        }))
+        choices: departmentChoices
       }
     ]).then(function (answers) {
       dbConnect.query('INSERT INTO role SET ?', {
@@ -91,15 +97,25 @@ const addRole = () => {
         department_id: answers.department_id
       }, function (err, res) {
         if (err) throw err;
-        console.table(res)
-        dbSearch()
-      })
-    })
-  })
+        console.table(res);
+        dbSearch();
+      });
+    });
+  });
 }
-const addEmployee = () => {
-  dbConnect.query('SELECT * FROM role', (err, role) => {
-    if (err) { console.log(err) }
+
+function addEmployee() {
+  dbConnect.query('SELECT * FROM role', (err, roles) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    const roleChoices = roles.map(role => ({
+      name: role.title,
+      value: role.id
+    }));
+
     inquirer.prompt([
       {
         type: 'input',
@@ -115,25 +131,28 @@ const addEmployee = () => {
         type: 'list',
         name: 'role_id',
         message: 'Role ID:',
-        choices: role.map(role => ({
-          name: `${role.title}`,
-          value: role.id
-        }))
+        choices: roleChoices
+      },
+      {
+        type: "input",
+        name: "manager_id",
+        message: "Manager ID"
       }
     ]).then(function (answers) {
       dbConnect.query('INSERT INTO employee SET ?', {
         first_name: answers.first_name,
         last_name: answers.last_name,
         role_id: answers.role_id,
-        manager_id: null
+        manager_id: answers.manager_id
       }, function (err, res) {
         if (err) throw err;
-        console.table(res)
-        dbSearch()
-      })
-    })
-  })
+        console.table(res);
+        dbSearch();
+      });
+    });
+  });
 }
+
 function viewDepartments() {
   dbConnect.query('SELECT * FROM department', function (err, res) {
     if (err) throw err;
